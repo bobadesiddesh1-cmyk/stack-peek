@@ -29,26 +29,50 @@ No build step, no `npm install`, no bundler. The folder loads and runs as-is
 
 ## What it detects
 
-**71 real fingerprint entries** across 9 categories (see
+**152 real fingerprint entries** across 23 categories (see
 `data/fingerprints.js`). This database — its breadth and accuracy — is the
 product.
 
-| Category | Count | Entries |
+| Category | Count | Examples |
 |---|---|---|
-| **CMS** | 16 | WordPress, Shopify, Wix, Squarespace, Webflow, Joomla, Drupal, Ghost, Duda, BigCommerce, Magento / Adobe Commerce, HubSpot CMS, Contentful, Sanity, Craft CMS, TYPO3 |
+| **CMS** | 16 | WordPress, Shopify, Wix, Squarespace, Webflow, Joomla, Drupal, Ghost, Duda, BigCommerce, Magento, HubSpot, Contentful, Sanity, Craft, TYPO3 |
 | **Ecommerce** | 6 | WooCommerce, Klaviyo, Yotpo, Judge.me, Recharge, Stamped.io |
-| **Framework** | 12 | React, Vue.js, Next.js, Nuxt.js, Angular, Svelte / SvelteKit, jQuery, Gatsby, Alpine.js, Ember.js, Preact, Backbone.js |
+| **Framework** | 15 | React, Vue, Next.js, Nuxt, Angular, Svelte, jQuery, Gatsby, Alpine, Ember, Preact, Backbone, Remix, Astro, SolidJS |
+| **UI Framework** | 9 | Bootstrap, Tailwind CSS, Material UI, Emotion, styled-components, Ant Design, Chakra UI, Bulma, Foundation |
+| **JS Library** | 10 | Lodash, Underscore, Moment.js, Axios, GSAP, Swiper, Slick, Modernizr, D3.js, Popper.js |
 | **Page Builder** | 4 | Elementor, Divi, WPBakery, Beaver Builder |
-| **Analytics** | 12 | Google Analytics 4, Google Analytics (Universal), Google Tag Manager, Hotjar, Microsoft Clarity, Mixpanel, Segment, Amplitude, Plausible, Matomo, Fathom, Heap |
-| **Ad Tech** | 9 | Google AdSense, Facebook Pixel, Criteo, Taboola, Outbrain, Google Publisher Tag, X (Twitter) Pixel, LinkedIn Insight Tag, TikTok Pixel |
-| **Chat / Support** | 5 | Intercom, Zendesk, Drift, Tawk.to, Crisp |
+| **Analytics** | 12 | GA4, Universal Analytics, Hotjar, Clarity, Mixpanel, Segment, Amplitude, Plausible, Matomo, Fathom, Heap, Yandex Metrica |
+| **A/B Testing** | 3 | Optimizely, VWO, Google Optimize |
+| **Tag Manager** | 3 | Google Tag Manager, Tealium, Adobe Experience/DTM |
+| **Ad Tech** | 11 | AdSense, Meta Pixel, Criteo, Taboola, Outbrain, Google Publisher Tag, X Pixel, LinkedIn, TikTok, Pinterest, Snapchat |
+| **Consent / Privacy** | 4 | OneTrust, Cookiebot, Usercentrics, Osano |
+| **Monitoring** | 4 | Sentry, New Relic, LogRocket, Datadog RUM |
+| **Chat / Support** | 7 | Intercom, Zendesk, Drift, Tawk.to, Crisp, LiveChat, Freshchat |
+| **Payments** | 6 | Stripe, PayPal, Razorpay, Braintree, Square, Adyen |
+| **Video** | 3 | YouTube, Vimeo, Wistia |
+| **Maps** | 3 | Google Maps, Mapbox, Leaflet |
+| **Fonts** | 3 | Google Fonts, Adobe Fonts (Typekit), Font Awesome |
 | **CAPTCHA / Security** | 3 | reCAPTCHA, hCaptcha, Cloudflare Turnstile |
-| **CDN / Hosting** | 4 | Cloudflare, Vercel, Netlify, AWS CloudFront |
+| **Security / WAF** | 4 | HSTS, Imperva, Sucuri, Akamai |
+| **CDN / Hosting** | 10 | Cloudflare, Vercel, Netlify, CloudFront, Fastly, jsDelivr, unpkg, cdnjs, Google Hosted Libraries, GitHub Pages |
+| **Web Server** | 6 | Nginx, Apache, IIS, LiteSpeed, OpenResty, Caddy |
+| **Programming Language** | 5 | PHP, ASP.NET, Ruby on Rails, Java, Express |
+| **Miscellaneous** | 5 | Open Graph, PWA, RSS/Atom, OneSignal, Mailchimp |
 
-GA4 vs. Universal Analytics are distinguished (the `G-` vs. `UA-` measurement-ID
-convention). WordPress-only technologies (Elementor, Divi, WooCommerce, …)
-**imply** WordPress — a page legitimately reporting *WordPress + Elementor +
-WooCommerce + GA4 + GTM* simultaneously is correct, not a conflict.
+**Version detection:** where a version is exposed (e.g. `jquery-3.6.3.min.js`,
+`Server: nginx/1.24.0`, `<meta generator="WordPress 6.5">`, GA4/GTM property
+IDs), StackPeek captures and shows it as a badge next to the name.
+
+GA4 vs. Universal Analytics are distinguished (the `G-` vs. `UA-` convention).
+WordPress-only technologies (Elementor, Divi, WooCommerce, …) **imply**
+WordPress — a page reporting *WordPress + Elementor + WooCommerce + GA4 + GTM*
+simultaneously is correct, not a conflict.
+
+**Precision:** bare product-name-as-word matches are weighted below the display
+threshold, so a page merely *mentioning* a technology in its text (e.g. the word
+"recharge" on a banking site) never produces a false detection — a real signal
+(CDN host, global variable, or dedicated header) is always required to surface a
+result.
 
 ---
 
@@ -106,7 +130,7 @@ injects two small, self-contained functions into the current tab and collects
 All regexes are **compiled once** at first scan and cached on the fingerprint
 objects (never recompiled). Signals are pre-joined once per scan, so each
 pattern is a single string test — no per-fingerprint DOM re-scan. A typical page
-(moderate HTML, ~20 scripts, all 71 fingerprints) scores in a couple of
+(moderate HTML, ~20 scripts, all 152 fingerprints) scores in a couple of
 milliseconds; the end-to-end scan (including injection) completes well under a
 second and never freezes the tab. The popup shows the measured scan time.
 
@@ -209,7 +233,7 @@ stackpeek/
 ├── engine/
 │   ├── detect.js                 # scoring/matching engine, confidence, implies
 │   └── headers.js                # same-origin self-fetch header reader
-├── data/fingerprints.js          # 71-entry fingerprint database (the core IP)
+├── data/fingerprints.js          # 152-entry fingerprint database (the core IP)
 ├── popup/
 │   ├── popup.html / popup.css / popup.js
 │   └── tabs/{results.js, history.js}
@@ -239,7 +263,7 @@ stackpeek/
 > Angular, Svelte), WordPress page builders (Elementor, Divi, WPBakery),
 > analytics (GA4, GTM, Hotjar, Clarity, Segment, Amplitude), ad tech (AdSense,
 > Meta Pixel, TikTok, LinkedIn), chat widgets, CAPTCHA, and CDN/hosting hints —
-> 71 technologies across 9 categories.
+> 152 technologies across 23 categories.
 >
 > Built for SEO and marketing pros doing prospect research and competitor
 > analysis, developers curious about a stack, and agencies qualifying leads.
