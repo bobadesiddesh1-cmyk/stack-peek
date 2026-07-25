@@ -54,7 +54,10 @@
         for (var p = 0; p < arr.length; p++) {
           if (arr[p].re && !arr[p]._rx) {
             try {
-              arr[p]._rx = new RegExp(arr[p].re, 'i');
+              // `cs: true` opts a pattern into case-SENSITIVE matching — needed
+              // for uppercase IDs (GA4 `G-...`, GTM `GTM-...`) so they don't
+              // match lowercase CSS class names like `g-animation`.
+              arr[p]._rx = new RegExp(arr[p].re, arr[p].cs ? '' : 'i');
             } catch (e) {
               // A malformed pattern is disabled rather than breaking the engine.
               arr[p]._rx = null;
@@ -66,7 +69,7 @@
       if (fp.version) {
         for (var vv = 0; vv < fp.version.length; vv++) {
           if (fp.version[vv].re && !fp.version[vv]._rx) {
-            try { fp.version[vv]._rx = new RegExp(fp.version[vv].re, 'i'); }
+            try { fp.version[vv]._rx = new RegExp(fp.version[vv].re, fp.version[vv].cs ? '' : 'i'); }
             catch (e2) { fp.version[vv]._rx = null; }
           }
         }

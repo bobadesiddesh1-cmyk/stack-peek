@@ -303,7 +303,7 @@
     },
     {
       name: 'jQuery', category: 'Framework',
-      version: [{ src: 'script', re: 'jquery[.\\-]?([0-9]+\\.[0-9]+\\.[0-9]+)' }],
+      version: [{ src: 'script', re: 'jquery[.\\-]([0-9]+\\.[0-9]+\\.[0-9]+)' }, { src: 'html', re: 'jquery[^"\\\']*?[?&]ver=([0-9]+\\.[0-9]+\\.[0-9]+)' }],
       patterns: {
         global: [{ name: 'jQuery', weight: 70 }],
         script: [{ re: 'jquery[-.](\\d|min|slim)|code\\.jquery\\.com|/jquery@\\d|ajax\\.googleapis\\.com/ajax/libs/jquery', weight: 55 }]
@@ -482,11 +482,11 @@
     /* --------------------------------------------------------- Analytics */
     {
       name: 'Google Analytics 4', category: 'Analytics',
-      version: [{ src: 'html', re: '(G-[A-Z0-9]{8,})' }],
+      version: [{ src: 'html', re: '(G-[A-Z0-9]{8,})', cs: true }],
       patterns: {
         global: [{ name: 'gtag', weight: 50 }],
         script: [{ re: 'googletagmanager\\.com/gtag/js', weight: 75 }],
-        html: [{ re: "G-[A-Z0-9]{8,}|gtag\\('config',\\s*'G-", weight: 78 }]
+        html: [{ re: "G-[A-Z0-9]{9,}", weight: 78, cs: true }, { re: "gtag\\('config',\\s*'G-", weight: 78 }]
       }
     },
     {
@@ -536,7 +536,7 @@
     },
     {
       name: 'Fathom Analytics', category: 'Analytics',
-      patterns: { global: [{ name: 'fathom', weight: 62 }], script: [{ re: 'cdn\\.usefathom\\.com', weight: 80 }] }
+      patterns: { global: [{ name: 'fathom', weight: 62 }], script: [{ re: 'cdn\\.usefathom\\.com|usefathom', weight: 80 }] }
     },
     {
       name: 'Heap', category: 'Analytics',
@@ -558,17 +558,17 @@
     },
     {
       name: 'Google Optimize', category: 'A/B Testing',
-      patterns: { script: [{ re: 'optimize\\.google\\.com/optimize|gtm\\.js[^"]*optimize', weight: 70 }], html: [{ re: 'OPT-[A-Z0-9]{6,}|async-hide', weight: 45 }] }
+      patterns: { script: [{ re: 'optimize\\.google\\.com/optimize', weight: 70 }], html: [{ re: 'OPT-[A-Z0-9]{6,}', weight: 55, cs: true }, { re: 'async-hide', weight: 20 }] }
     },
 
     /* ------------------------------------------------------ Tag Manager */
     {
       name: 'Google Tag Manager', category: 'Tag Manager',
-      version: [{ src: 'html', re: '(GTM-[A-Z0-9]{4,})' }],
+      version: [{ src: 'html', re: '(GTM-[A-Z0-9]{5,})', cs: true }],
       patterns: {
         global: [{ name: 'google_tag_manager', weight: 70 }],
         script: [{ re: 'googletagmanager\\.com/gtm\\.js', weight: 85 }],
-        html: [{ re: 'googletagmanager\\.com/ns\\.html|GTM-[A-Z0-9]{4,}', weight: 72 }]
+        html: [{ re: 'googletagmanager\\.com/ns\\.html', weight: 72 }, { re: 'GTM-[A-Z0-9]{5,}', weight: 72, cs: true }]
       }
     },
     {
