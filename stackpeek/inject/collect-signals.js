@@ -38,17 +38,39 @@ function collectSignalsInPage() {
   // Fixed roster of window globals to probe. Kept in sync with the `global`
   // patterns in data/fingerprints.js. Existence-only checks; never invoked.
   var GLOBAL_NAMES = [
+    // CMS / commerce
     'Shopify', 'wixBiSession', 'wixPerformanceMeasurements', 'Webflow', 'Drupal',
     'BCData', '_hsq', 'hbspt', 'wc_add_to_cart_params', 'woocommerce_params',
-    'klaviyo', '_klOnsite', 'yotpo', 'React', 'Vue', '__VUE__', '__NEXT_DATA__',
-    '__NUXT__', 'getAllAngularRootElements', 'ng', 'jQuery', '___gatsby',
-    'Alpine', 'Ember', 'preact', 'Backbone', 'elementorFrontend', 'gtag', 'ga',
-    'google_tag_manager', 'dataLayer', 'hj', '_hjSettings', 'clarity',
-    'mixpanel', 'analytics', 'amplitude', 'plausible', '_paq', 'Matomo', 'Piwik',
-    'fathom', 'heap', 'adsbygoogle', 'fbq', '_fbq', 'criteo_q', '_taboola',
-    'OBR', 'googletag', 'twq', '_linkedin_data_partner_ids', 'ttq', 'Intercom',
-    'zE', 'zEmbed', 'drift', 'driftt', 'Tawk_API', '$crisp', 'CRISP_WEBSITE_ID',
-    'grecaptcha', 'hcaptcha', 'turnstile', 'wp'
+    'klaviyo', '_klOnsite', 'yotpo', 'wp',
+    // frameworks
+    'React', 'Vue', '__VUE__', '__NEXT_DATA__', '__NUXT__',
+    'getAllAngularRootElements', 'ng', 'jQuery', '___gatsby', 'Alpine', 'Ember',
+    'preact', 'Backbone', '__remixContext',
+    // JS libraries
+    'moment', 'axios', 'gsap', 'Swiper', 'Modernizr', 'd3', 'Popper',
+    // page builder
+    'elementorFrontend',
+    // analytics / tag / A-B
+    'gtag', 'ga', 'google_tag_manager', 'dataLayer', 'hj', '_hjSettings',
+    'clarity', 'mixpanel', 'analytics', 'amplitude', 'plausible', '_paq',
+    'Matomo', 'Piwik', 'fathom', 'heap', 'ym', 'yaCounter', 'optimizely', 'VWO',
+    '_vwo_code', 'utag', '_satellite',
+    // ad tech
+    'adsbygoogle', 'fbq', '_fbq', 'criteo_q', '_taboola', 'OBR', 'googletag',
+    'twq', '_linkedin_data_partner_ids', 'ttq', 'pintrk', 'snaptr',
+    // consent
+    'OneTrust', 'Cookiebot', 'usercentrics',
+    // monitoring
+    'Sentry', 'newrelic', 'NREUM', 'LogRocket', 'DD_RUM',
+    // chat / support
+    'Intercom', 'zE', 'zEmbed', 'drift', 'driftt', 'Tawk_API', '$crisp',
+    'CRISP_WEBSITE_ID', 'LiveChatWidget', '__lc', 'fcWidget',
+    // payments
+    'Stripe', 'paypal', 'Razorpay', 'braintree',
+    // video / maps
+    'YT', 'Wistia', 'mapboxgl',
+    // captcha / misc
+    'grecaptcha', 'hcaptcha', 'turnstile', 'OneSignal'
   ];
 
   var out = {

@@ -35,10 +35,11 @@
   function itemHtml(item) {
     var conf = item.confidence;
     var impliedTag = item.implied ? '<span class="sp-implied" title="Inferred as a dependency of another detected technology">inferred</span>' : '';
+    var verTag = item.version ? '<span class="sp-ver">' + esc(item.version) + '</span>' : '';
     return '' +
       '<div class="sp-item" tabindex="0" role="button" aria-expanded="false">' +
         '<div class="sp-item-row">' +
-          '<span class="sp-item-name">' + esc(item.name) + impliedTag + '</span>' +
+          '<span class="sp-item-name">' + esc(item.name) + verTag + impliedTag + '</span>' +
           '<span class="sp-item-pct">' + conf + '%</span>' +
         '</div>' +
         '<div class="sp-bar"><div class="sp-bar-fill ' + tierClass(conf) + '" style="width:' + conf + '%"></div></div>' +

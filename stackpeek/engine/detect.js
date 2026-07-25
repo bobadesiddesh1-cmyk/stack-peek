@@ -62,8 +62,38 @@
           }
         }
       }
+      // version capture patterns (one capture group each)
+      if (fp.version) {
+        for (var vv = 0; vv < fp.version.length; vv++) {
+          if (fp.version[vv].re && !fp.version[vv]._rx) {
+            try { fp.version[vv]._rx = new RegExp(fp.version[vv].re, 'i'); }
+            catch (e2) { fp.version[vv]._rx = null; }
+          }
+        }
+      }
     }
     compiled = true;
+  }
+
+  // Pull a version string from a fingerprint's version patterns (first hit wins).
+  function extractVersion(fp, ctx) {
+    if (!fp.version) { return ''; }
+    for (var i = 0; i < fp.version.length; i++) {
+      var v = fp.version[i];
+      var rx = v._rx;
+      if (!rx) { continue; }
+      var hay = '';
+      if (v.src === 'script') { hay = ctx.scriptsJoined; }
+      else if (v.src === 'html') { hay = ctx.html; }
+      else if (v.src === 'meta') { hay = ctx.metaJoined; }
+      else if (v.src === 'header') { hay = (v.header && ctx.headers[v.header]) || ''; }
+      if (!hay) { continue; }
+      try {
+        var m = rx.exec(hay);
+        if (m && m[1]) { return m[1]; }
+      } catch (e) { /* ignore one bad match */ }
+    }
+    return '';
   }
 
   // Return the highest matched weight for a string-tested pattern array, plus
@@ -156,6 +186,13 @@
     var generators = signals.metaGenerators || [];
     var globals = signals.globals || {};
 
+    var vctx = {
+      scriptsJoined: scriptsJoined,
+      html: html,
+      metaJoined: generators.join('\n'),
+      headers: headers
+    };
+
     var byName = {}; // name -> result object
 
     for (var i = 0; i < fingerprints.length; i++) {
@@ -201,6 +238,7 @@
         confidence: Math.min(100, Math.round(score)),
         rawScore: score,
         reasons: reasons,
+        version: extractVersion(fp, vctx),
         implies: fp.implies || [],
         implied: false
       };
@@ -227,6 +265,7 @@
             confidence: IMPLY_PARENT_FLOOR,
             rawScore: IMPLY_PARENT_FLOOR,
             reasons: [{ type: 'implied', label: 'implied by ' + child.name }],
+            version: '',
             implies: def && def.implies ? def.implies : [],
             implied: true
           };

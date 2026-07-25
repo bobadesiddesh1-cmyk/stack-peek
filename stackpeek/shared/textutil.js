@@ -66,7 +66,8 @@
         var parts = [];
         for (var j = 0; j < group.items.length; j++) {
           var it = group.items[j];
-          parts.push(it.name + ' (' + it.confidence + '%)');
+          var nm = it.version ? it.name + ' ' + it.version : it.name;
+          parts.push(nm + ' (' + it.confidence + '%)');
         }
         lines.push(group.category + ': ' + parts.join(', '));
       }
