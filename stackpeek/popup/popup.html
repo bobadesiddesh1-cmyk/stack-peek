@@ -10,13 +10,18 @@
   <div class="sp-app">
     <header class="sp-header">
       <div class="sp-brand">
-        <span class="sp-logo" aria-hidden="true">🔍</span>
-        <span class="sp-title">StackPeek</span>
+        <img class="sp-logo" src="../icons/icon48.png" alt="" aria-hidden="true" />
+        <span class="sp-title">Stack<span>Peek</span></span>
       </div>
-      <nav class="sp-tabs" role="tablist" aria-label="StackPeek views">
-        <button class="sp-tab is-active" id="tab-results" role="tab" aria-selected="true" aria-controls="panel-results">Results</button>
-        <button class="sp-tab" id="tab-history" role="tab" aria-selected="false" aria-controls="panel-history">History</button>
-      </nav>
+      <div class="sp-head-right">
+        <button class="sp-expand" id="expand-btn" type="button" title="Open results in a full tab" aria-label="Open results in a full tab">
+          <svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M9.5 2H14v4.5M14 2l-5 5M6.5 14H2V9.5M2 14l5-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <nav class="sp-tabs" role="tablist" aria-label="StackPeek views">
+          <button class="sp-tab is-active" id="tab-results" role="tab" aria-selected="true" aria-controls="panel-results">Results</button>
+          <button class="sp-tab" id="tab-history" role="tab" aria-selected="false" aria-controls="panel-history">History</button>
+        </nav>
+      </div>
     </header>
 
     <div class="sp-actionbar">

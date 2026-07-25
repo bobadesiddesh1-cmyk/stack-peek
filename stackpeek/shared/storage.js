@@ -51,6 +51,30 @@
     });
   }
 
+  // Last detection result, stashed so the full-tab view can render it.
+  var LASTVIEW_KEY = 'sp_lastview';
+  function setLastView(result) {
+    return new Promise(function (resolve) {
+      try {
+        var payload = {};
+        payload[LASTVIEW_KEY] = result || null;
+        chrome.storage.local.set(payload, function () { resolve(true); });
+      } catch (e) { resolve(false); }
+    });
+  }
+  function getLastView() {
+    return new Promise(function (resolve) {
+      try {
+        chrome.storage.local.get(LASTVIEW_KEY, function (data) {
+          try {
+            if (chrome.runtime && chrome.runtime.lastError) { resolve(null); return; }
+            resolve((data && data[LASTVIEW_KEY]) || null);
+          } catch (e) { resolve(null); }
+        });
+      } catch (e) { resolve(null); }
+    });
+  }
+
   function clearHistory() {
     return new Promise(function (resolve) {
       try {
@@ -65,6 +89,8 @@
     getHistory: getHistory,
     addHistory: addHistory,
     clearHistory: clearHistory,
+    setLastView: setLastView,
+    getLastView: getLastView,
     HISTORY_MAX: HISTORY_MAX
   };
 

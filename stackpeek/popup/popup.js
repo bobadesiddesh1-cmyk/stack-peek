@@ -84,6 +84,7 @@
       }
 
       saveSnapshot(result);
+      stashLastView(result);
     });
   }
 
@@ -94,6 +95,20 @@
       if (result.flat[i].name === topName) { return result.flat[i].category; }
     }
     return result.flat[0].category;
+  }
+
+  // Keep the last result stashed so the full-tab view can render it.
+  function stashLastView(result) {
+    try { window.SP_storage.setLastView(result); } catch (e) { /* non-fatal */ }
+  }
+
+  function openFullTab() {
+    // Persist whatever is on screen, then open the spacious tab view.
+    var write = currentResult ? window.SP_storage.setLastView(currentResult) : Promise.resolve();
+    write.then(function () {
+      try { chrome.tabs.create({ url: chrome.runtime.getURL('popup/popup.html?view=tab') }); }
+      catch (e) { setStatus('Couldn’t open a full tab.', 'error'); }
+    });
   }
 
   function saveSnapshot(result) {
@@ -180,13 +195,39 @@
     els.resultsRoot = $('results-root');
     els.historyRoot = $('history-root');
     els.status = $('status');
+    els.expand = $('expand-btn');
 
-    window.SP_results.render(els.resultsRoot, null); // idle state
-
-    els.detect.addEventListener('click', runScan);
     els.copy.addEventListener('click', copySummary);
     els.tabResults.addEventListener('click', function () { activateTab('results'); });
     els.tabHistory.addEventListener('click', function () { activateTab('history'); });
+    if (els.expand) { els.expand.addEventListener('click', openFullTab); }
+
+    var isTabView = false;
+    try { isTabView = new URLSearchParams(location.search).get('view') === 'tab'; } catch (e) {}
+
+    if (isTabView) {
+      // Spacious full-page view: render the last saved detection. Detection
+      // itself can't run here (there's no web page to scan from an extension
+      // tab), so the Detect button becomes a hint back to the popup.
+      document.body.classList.add('sp-tabview');
+      els.detect.textContent = 'Open the StackPeek icon on any page to run a new scan';
+      els.detect.disabled = true;
+      els.detect.classList.add('sp-detect-hint');
+      window.SP_storage.getLastView().then(function (result) {
+        if (result && result.categories) {
+          currentResult = result;
+          window.SP_results.render(els.resultsRoot, result);
+          els.copy.disabled = false;
+          setStatus('Viewing your last detection · ' + (result.hostname || ''), 'info');
+        } else {
+          window.SP_results.render(els.resultsRoot, null);
+          setStatus('No saved detection yet — run one from the popup.', 'info');
+        }
+      });
+    } else {
+      window.SP_results.render(els.resultsRoot, null); // idle state
+      els.detect.addEventListener('click', runScan);
+    }
   }
 
   document.addEventListener('DOMContentLoaded', init);
