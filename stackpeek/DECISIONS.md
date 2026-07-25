@@ -112,7 +112,13 @@ defaults picked where the spec left something genuinely unspecified.
 
 ## Icons
 
-- **DECISION — generated placeholder PNGs.** Real 16/32/48/128 PNG icons are
-  generated at build time (a simple magnifying-glass-over-layers mark) so the
-  extension loads without missing-asset warnings. They are committed as binary
-  PNGs. Swap for branded art before Web Store submission.
+- **DECISION — isometric-stack brand mark, hand-rendered.** The 16/32/48/128 PNG
+  icons are produced by `scripts/render_icons.py`, a pure-Python supersampled
+  software renderer (no PIL/cairo in this environment), so edges are genuinely
+  anti-aliased rather than raw pixel steps. The mark is an **isometric stack of
+  three layers** (green → blue → light-blue) on a deep-navy rounded tile — a
+  literal "stack" that reads at a glance and stays legible at 16px. Chosen from a
+  set of six explored directions (magnifier-over-stack, chevrons, peek-eye,
+  browser-inspect, isometric stack, radar). Re-run the script to regenerate. A
+  designer can refine it before Web Store submission, but it is a real brand
+  mark, not a placeholder.
