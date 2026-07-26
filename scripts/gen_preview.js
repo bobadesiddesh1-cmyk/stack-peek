@@ -19,7 +19,7 @@ const CHEV = '<svg class="sp-chev" viewBox="0 0 16 16" fill="none"><path d="M6 4
 function row(it, open){
   const ver = it.version?`<span class="sp-ver">${esc(it.version)}</span>`:'';
   const evi = (it.evi||[]).map(e=>`<div class="sp-evi-row"><span class="sp-chip sp-chip-${e.t}">${e.t==='global'?'global':e.t}</span><span class="sp-evi-text">${e.x}</span></div>`).join('');
-  return `<div class="sp-row${open?' sp-open':''}" tabindex="0">${logo(it)}<div class="sp-main-col"><div class="sp-name-line"><span class="sp-name">${esc(it.name)}</span>${ver}</div><div class="sp-sub">${esc(it.sub)}</div></div><div class="sp-conf"><div class="sp-conf-bar"><div class="sp-conf-fill ${tier(it.c)}" style="width:${it.c}%"></div></div><span class="sp-conf-pct">${it.c}%</span>${CHEV}</div></div>`+
+  return `<div class="sp-row${open?' sp-open':''}" tabindex="0">${logo(it)}<div class="sp-main-col"><div class="sp-name-line"><span class="sp-name">${esc(it.name)}</span>${ver}</div><div class="sp-sub">${esc(it.sub)}</div></div>${CHEV}</div>`+
     `<div class="sp-evi"${open?' style="display:block"':''}><div class="sp-evi-label">Evidence</div>${evi}</div>`;
 }
 function cat(name, items){
