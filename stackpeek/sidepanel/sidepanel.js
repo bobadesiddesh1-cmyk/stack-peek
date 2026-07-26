@@ -33,8 +33,6 @@
 
   function $(id) { return document.getElementById(id); }
 
-  function tierClass(c) { return c >= 80 ? 't-high' : (c >= 50 ? 't-med' : 't-low'); }
-
   function monogram(name) {
     var m = String(name || '?').replace(/[^a-z0-9]/i, '');
     return (m.charAt(0) || '?').toUpperCase();
@@ -97,10 +95,7 @@
           '<div class="sp-name-line"><span class="sp-name">' + esc(item.name) + '</span>' + ver + inf + '</div>' +
           '<div class="sp-sub">' + esc(subLine(item.reasons)) + '</div>' +
         '</div>' +
-        '<div class="sp-conf">' +
-          '<div class="sp-conf-bar"><div class="sp-conf-fill ' + tierClass(item.confidence) + '" style="width:' + item.confidence + '%"></div></div>' +
-          '<span class="sp-conf-pct">' + item.confidence + '%</span>' + CHEV +
-        '</div>' +
+        CHEV +
       '</div>' +
       '<div class="sp-evi">' + eviHtml(item.reasons) + '</div>';
   }
