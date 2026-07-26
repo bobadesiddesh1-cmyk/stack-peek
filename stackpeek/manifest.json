@@ -3,19 +3,21 @@
   "name": "StackPeek — Website Tech Stack Detector",
   "version": "1.0.0",
   "description": "See what any website is built on — CMS, frameworks, analytics, ad tech, hosting. One click. No account, no limits. 100% local.",
-  "permissions": ["activeTab", "scripting", "storage"],
+  "permissions": ["activeTab", "scripting", "storage", "sidePanel"],
   "background": {
     "service_worker": "background.js"
   },
   "action": {
     "default_title": "StackPeek — detect this page's tech stack",
-    "default_popup": "popup/popup.html",
     "default_icon": {
       "16": "icons/icon16.png",
       "32": "icons/icon32.png",
       "48": "icons/icon48.png",
       "128": "icons/icon128.png"
     }
+  },
+  "side_panel": {
+    "default_path": "sidepanel/sidepanel.html"
   },
   "icons": {
     "16": "icons/icon16.png",

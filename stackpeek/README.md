@@ -19,11 +19,17 @@ to meter.
 4. Click **Load unpacked** and select the **`stackpeek/`** folder (the one
    containing `manifest.json`).
 5. Pin the StackPeek icon to your toolbar.
-6. Navigate to any website, click the icon, and press **Detect stack on this
-   page**.
+6. Navigate to any website and **click the StackPeek icon** — a **side panel**
+   docks on the right and detects the current page automatically. It stays open
+   while you browse; hit **Rescan** (↻) after navigating, or click the icon
+   again on any page.
+
+StackPeek opens as a clean, light **Chrome side panel** with real technology
+logos, versions, confidence, and click-to-expand evidence for every detection.
 
 No build step, no `npm install`, no bundler. The folder loads and runs as-is
-(Manifest V3, vanilla JavaScript).
+(Manifest V3, vanilla JavaScript). Permissions: `activeTab`, `scripting`,
+`storage`, `sidePanel` — no host permissions.
 
 ---
 

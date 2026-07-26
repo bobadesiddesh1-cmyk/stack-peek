@@ -85,7 +85,34 @@ defaults picked where the spec left something genuinely unspecified.
   a fingerprint explicitly `implies` a parent (e.g. Elementor implies WordPress
   — we boost, never suppress).
 
-## UI
+## UI — v2: Chrome side panel (light, logo-driven)
+
+- **DECISION — replaced the popup with a Chrome Side Panel.** The action popup
+  is capped by Chrome at ~600px tall and feels cramped. The side panel
+  (`chrome.sidePanel`) docks beside the page, stays open while browsing, is
+  user-resizable, and has no height cap — a far better surface for scanning a
+  stack. The old `popup/` UI was removed.
+- **DECISION — scan on toolbar-icon click.** Clicking the icon fires
+  `action.onClicked` (a user gesture): we open the side panel for that tab and,
+  in the same gesture, inject the collectors (so `activeTab` is valid). The
+  background stashes raw signals under `sp_scan_input`; the panel reads it via
+  `storage`, runs the engine, and renders. A "Rescan" button re-injects into the
+  active tab (works while the tab's `activeTab` grant persists, i.e. until it
+  navigates). This keeps the permission set minimal — `activeTab`, `scripting`,
+  `storage`, `sidePanel`, no host permissions — while giving a one-click flow.
+- **DECISION — clean light theme.** A calm, professional light UI (Wappalyzer-
+  adjacent): grouped categories, subtle dividers, real per-technology logos,
+  versions, a compact confidence indicator, and click-to-expand evidence. Single
+  committed light theme (a focused utility surface).
+- **DECISION — real logos via Simple Icons (CC0).** `data/logos.js` is generated
+  by `scripts/gen_logos.js` from the Simple Icons set (CC0 1.0, public domain):
+  a `name -> { hex, path }` map, inlined so there are **no extra files and zero
+  network requests**. ~92 of the 152 technologies have a brand mark; the rest
+  (and brands Simple Icons dropped over trademark policy — LinkedIn, Amazon,
+  Magento, …) render a colored monogram tile keyed to the category. Attribution
+  is in the generated file header and README.
+
+## UI (original popup notes, retained for history)
 
 - **DECISION — plain popup, no Shadow DOM.** The spec mentions Shadow DOM but
   notes "the popup itself is already isolated." An extension popup document is a

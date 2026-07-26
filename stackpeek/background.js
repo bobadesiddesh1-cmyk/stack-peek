@@ -1,103 +1,103 @@
 /*
  * StackPeek — background service worker (MV3).
  *
- * Orchestration only. It owns no detection logic and makes no external
- * requests of its own. On a scan request from the popup it:
- *   1. resolves the active tab,
- *   2. injects the self-contained signal collector into that tab,
- *   3. injects the self-contained same-origin header reader into that tab,
- *   4. returns both raw payloads to the popup, which runs the engine + renders.
+ * Orchestration only; owns no detection logic and makes no external requests.
+ * Flow:
+ *   1. User clicks the toolbar icon → chrome.action.onClicked fires. This is a
+ *      user gesture that (a) lets us open the side panel and (b) grants
+ *      `activeTab` for the current tab.
+ *   2. We open the side panel for that tab and inject the two self-contained
+ *      collectors (signals + same-origin headers) into the page.
+ *   3. We stash the raw payload under `sp_scan_input`; the side panel reads it
+ *      (via storage) and runs the engine + renders.
  *
- * The injected functions come from importScripts below — a single source of
- * truth shared with any test harness. They are passed to executeScript by
- * reference; chrome serializes them (they are fully self-contained, so this is
- * safe) and runs them in the page.
+ * The side panel's "Rescan" button messages us (SP_RESCAN); we re-inject into
+ * the active tab. `activeTab` persists for a tab until it navigates, so a
+ * rescan of the same page works; a failure (grant lost / restricted page) is
+ * reported back as an error state.
  *
- * All injection is gated on the user's click (activeTab). No host permissions,
- * no automatic scanning, no content scripts registered for page loads.
+ * Permissions: activeTab, scripting, storage, sidePanel — no host permissions,
+ * no automatic scanning, no content scripts on page load.
  */
 'use strict';
 
 importScripts('inject/collect-signals.js', 'engine/headers.js');
 
-// Pages we cannot inject into (browser-internal / store / other extensions).
-function isRestrictedUrl(url) {
-  if (!url) { return true; }
-  return /^(chrome|edge|brave|about|chrome-extension|moz-extension|devtools|view-source):/i.test(url) ||
-    /^https:\/\/chrome\.google\.com\/webstore/i.test(url) ||
-    /^https:\/\/chromewebstore\.google\.com/i.test(url);
+var SCAN_KEY = 'sp_scan_input';
+
+function store(obj) {
+  return new Promise(function (resolve) {
+    try {
+      var p = {}; p[SCAN_KEY] = obj;
+      chrome.storage.local.set(p, function () { resolve(); });
+    } catch (e) { resolve(); }
+  });
 }
 
-function getActiveTab() {
+function runInPage(tabId, fn) {
+  return chrome.scripting.executeScript({
+    target: { tabId: tabId },
+    func: fn,
+    world: 'MAIN'
+  }).then(function (frames) {
+    return (frames && frames.length && frames[0]) ? frames[0].result : null;
+  });
+}
+
+function scanTab(tabId) {
+  // Signal 'scanning' so the panel can show its loading state promptly.
+  return store({ ok: false, scanning: true, ts: Date.now() }).then(function () {
+    return runInPage(tabId, self.collectSignalsInPage);
+  }).then(function (signals) {
+    if (!signals) {
+      return store({ error: 'Could not read this page. Try reloading the tab, then click the StackPeek icon again.', ts: Date.now() });
+    }
+    return runInPage(tabId, self.collectHeadersInPage).then(function (headerResult) {
+      return store({ ok: true, signals: signals, headerResult: headerResult || { headers: {}, ok: false, note: 'no header data' }, ts: Date.now() });
+    }).catch(function () {
+      return store({ ok: true, signals: signals, headerResult: { headers: {}, ok: false, note: 'header injection blocked' }, ts: Date.now() });
+    });
+  }).catch(function (err) {
+    var msg = 'StackPeek can’t scan this page. Open a normal website (not a browser or Web Store page) and click the icon again.';
+    try { if (err && err.message && /No tab|cannot|Cannot|Missing/.test(err.message)) { /* keep friendly msg */ } } catch (e) {}
+    return store({ error: msg, ts: Date.now() });
+  });
+}
+
+function getActiveTabId() {
   return new Promise(function (resolve, reject) {
     try {
       chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
         if (chrome.runtime.lastError) { reject(new Error(chrome.runtime.lastError.message)); return; }
-        if (!tabs || !tabs.length) { reject(new Error('No active tab found.')); return; }
-        resolve(tabs[0]);
+        if (!tabs || !tabs.length) { reject(new Error('No active tab.')); return; }
+        resolve(tabs[0].id);
       });
     } catch (e) { reject(e); }
   });
 }
 
-function runCollector(tabId, fn) {
-  return chrome.scripting.executeScript({
-    target: { tabId: tabId },
-    func: fn,
-    world: 'MAIN' // access page's real window globals (window.Shopify, __NEXT_DATA__, ...)
-  }).then(function (frames) {
-    if (frames && frames.length && frames[0]) { return frames[0].result; }
-    return null;
-  });
-}
-
-function handleScan(sendResponse) {
-  getActiveTab().then(function (tab) {
-    if (isRestrictedUrl(tab.url)) {
-      sendResponse({
-        ok: false,
-        error: 'StackPeek can\'t scan this page (browser-internal or Web Store page). Open a normal website and try again.'
+// Toolbar icon click: open the panel + scan (activeTab granted here).
+chrome.action.onClicked.addListener(function (tab) {
+  try {
+    if (chrome.sidePanel && chrome.sidePanel.open) {
+      chrome.sidePanel.open({ tabId: tab.id }).catch(function () {
+        try { chrome.sidePanel.open({ windowId: tab.windowId }); } catch (e) {}
       });
-      return;
     }
+  } catch (e) {}
+  if (tab && tab.id != null) { scanTab(tab.id); }
+});
 
-    // Collect DOM/global signals first (always available), then headers
-    // (best-effort). A header failure never fails the scan.
-    runCollector(tab.id, self.collectSignalsInPage).then(function (signals) {
-      if (!signals) {
-        sendResponse({ ok: false, error: 'Could not read the page. Try reloading the tab and scanning again.' });
-        return;
-      }
-      runCollector(tab.id, self.collectHeadersInPage).then(function (headerResult) {
-        sendResponse({
-          ok: true,
-          signals: signals,
-          headerResult: headerResult || { headers: {}, ok: false, note: 'no header data' }
-        });
-      }).catch(function () {
-        // Headers are corroborating only — proceed without them.
-        sendResponse({
-          ok: true,
-          signals: signals,
-          headerResult: { headers: {}, ok: false, note: 'header injection blocked' }
-        });
-      });
-    }).catch(function (err) {
-      var msg = 'Injection failed.';
-      try { if (err && err.message) { msg = 'Injection failed: ' + err.message; } } catch (e) {}
-      sendResponse({ ok: false, error: msg });
-    });
-  }).catch(function (err) {
-    var msg = 'Could not access the active tab.';
-    try { if (err && err.message) { msg = err.message; } } catch (e) {}
-    sendResponse({ ok: false, error: msg });
-  });
-}
-
+// Rescan request from the panel.
 chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
-  if (message && message.type === 'SP_SCAN') {
-    handleScan(sendResponse);
-    return true; // keep the message channel open for the async response
+  if (message && message.type === 'SP_RESCAN') {
+    getActiveTabId().then(function (tabId) { return scanTab(tabId); })
+      .then(function () { sendResponse({ ok: true }); })
+      .catch(function () {
+        store({ error: 'Couldn’t reach the active tab. Click the StackPeek icon on the page you want to scan.', ts: Date.now() });
+        sendResponse({ ok: false });
+      });
+    return true; // async
   }
   return false;
 });
