@@ -139,13 +139,13 @@ defaults picked where the spec left something genuinely unspecified.
 
 ## Icons
 
-- **DECISION — isometric-stack brand mark, hand-rendered.** The 16/32/48/128 PNG
-  icons are produced by `scripts/render_icons.py`, a pure-Python supersampled
-  software renderer (no PIL/cairo in this environment), so edges are genuinely
-  anti-aliased rather than raw pixel steps. The mark is an **isometric stack of
-  three layers** (green → blue → light-blue) on a deep-navy rounded tile — a
-  literal "stack" that reads at a glance and stays legible at 16px. Chosen from a
-  set of six explored directions (magnifier-over-stack, chevrons, peek-eye,
-  browser-inspect, isometric stack, radar). Re-run the script to regenerate. A
-  designer can refine it before Web Store submission, but it is a real brand
-  mark, not a placeholder.
+- **DECISION — faceted-prism brand mark, SVG-rendered.** The 16/32/48/128 PNG
+  icons are produced by `scripts/render_icons.js`, which rasterizes a
+  hand-authored SVG via `@resvg/resvg-js` (crisp gradients, facets, and a
+  size-aware level of detail — the thin outline, gloss, and drop shadow are
+  dropped below 48px so the mark stays clean at 16px). The mark is a **faceted
+  prism / gem** on a violet→indigo gradient tile — "see through to a site's
+  structure." Chosen after several rounds (isometric stack, magnifier, cube,
+  fingerprint, prism). Re-run `npm run icons` to regenerate. Earlier iterations
+  used a pure-Python supersampled renderer (`scripts/render_icons.py`, since
+  removed) before the SVG rasterizer was available.
