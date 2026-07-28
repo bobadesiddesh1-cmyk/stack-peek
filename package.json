@@ -5,10 +5,11 @@
   "description": "Dev tooling for the StackPeek Chrome extension. The extension itself (stackpeek/) is vanilla JS with NO build step and NO dependencies — it loads unpacked as-is. This package only backs the scripts/ validation harnesses.",
   "scripts": {
     "validate:fetch": "NODE_USE_ENV_PROXY=1 node scripts/fetch_validate.js",
-    "icons": "python3 scripts/render_icons.py",
+    "icons": "node scripts/render_icons.js",
     "logos": "node scripts/gen_logos.js"
   },
   "devDependencies": {
+    "@resvg/resvg-js": "^2.6.2",
     "playwright-core": "^1.62.0",
     "simple-icons": "^16.27.1"
   }
