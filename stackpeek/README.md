@@ -259,31 +259,42 @@ stackpeek/
 > No lookup limits, no account. See any site's CMS, framework, analytics & ad
 > tech in one click. 100% local, private, free.
 
-**Description:**
+**Description:** _(written as prose — no brand-list keyword stuffing, which the
+Web Store rejects as excessive metadata under "Spam and Placement in the Store")_
 
-> **No lookup limits. No account. No monthly cap.** StackPeek tells you what any
-> website is built on — instantly, privately, and entirely inside your browser.
+> See what any website is built on — in one click.
 >
-> One click reveals the CMS (WordPress, Shopify, Wix, Webflow, Squarespace,
-> Drupal, and more), the frontend framework (React, Vue, Next.js, Nuxt,
-> Angular, Svelte), WordPress page builders (Elementor, Divi, WPBakery),
-> analytics (GA4, GTM, Hotjar, Clarity, Segment, Amplitude), ad tech (AdSense,
-> Meta Pixel, TikTok, LinkedIn), chat widgets, CAPTCHA, and CDN/hosting hints —
-> 152 technologies across 23 categories.
+> StackPeek reveals a website's technology stack in a clean side panel: its
+> content management system, front-end framework, e-commerce platform,
+> analytics, advertising tools, hosting, and more. Each detection shows the
+> technology's logo, its version where available, and the exact evidence behind
+> it.
 >
-> Built for SEO and marketing pros doing prospect research and competitor
-> analysis, developers curious about a stack, and agencies qualifying leads.
+> Built for SEO and marketing professionals researching prospects and
+> competitors, developers curious about how a site is built, and agencies
+> qualifying leads.
 >
-> **Why StackPeek is different:**
-> - **No lookup limits, ever** — the commercial tools meter you; StackPeek
->   can't, because there's no server.
-> - **100% local** — detection runs against the page you're already viewing.
->   The only network request is StackPeek reading the current page's own
->   response headers. Zero telemetry, zero tracking, zero account.
-> - **Transparent** — click any result to see exactly which signals matched.
-> - **One-click Copy summary** — paste a clean stack breakdown straight into
->   your prospecting sheet or client note.
-> - **Local history** — your last 20 lookups, on your device only.
+> WHY STACKPEEK IS DIFFERENT
+> - 100% local. Detection runs against the page you're already viewing, inside
+>   your browser. The only network request it makes is reading the current
+>   page's own response headers. There's no server, no account, and no
+>   telemetry.
+> - No lookup limits. Because there's nothing to meter, you can check as many
+>   sites as you like — free.
+> - Transparent. Click any result to see which signals matched, so you can trust
+>   what you're seeing.
+> - Practical. Copy a clean summary of a site's stack for your notes, and keep a
+>   local history of the sites you've checked — stored only on your device.
 >
-> Permissions are minimal by design: `activeTab`, `scripting`, and `storage` —
-> no broad site access, and nothing runs until you press the button.
+> HOW IT WORKS
+> Detection runs only when you click the StackPeek icon — never automatically.
+> StackPeek reads the current page's markup, scripts, and response headers,
+> matches them against its built-in database of technology signatures, and shows
+> the results grouped by category. Everything happens on your device.
+>
+> PRIVATE BY DESIGN
+> StackPeek requests only the minimal permissions needed to inspect the tab you
+> choose to scan. It has no access to other sites, collects no personal data,
+> and sends nothing anywhere.
+>
+> Free. Private. Unlimited.
