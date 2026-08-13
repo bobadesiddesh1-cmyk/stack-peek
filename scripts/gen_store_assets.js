@@ -41,7 +41,7 @@ function panel(openEvidence){
     <nav class="sp-tabs"><button class="sp-tab is-active">Detected</button><button class="sp-tab">History</button></nav>
     <div class="sp-site"><div class="sp-site-host">elementor.com</div><div class="sp-site-meta">13 technologies detected</div></div>
     <main class="sp-body"><section class="sp-panel is-active">${body}</section></main>
-    <footer class="sp-foot"><span class="sp-foot-badge">100% local</span><span class="sp-foot-text">No account · no limits · no telemetry</span></footer>
+    <footer class="sp-foot"><div class="sp-foot-row"><span class="sp-foot-badge">100% local</span><span class="sp-foot-text">No account · no limits · no telemetry</span></div><a class="sp-credit" href="https://www.buildwithsiddesh.com/"><svg class="sp-bws" viewBox="0 0 32 32" fill="none"><rect width="32" height="32" rx="8" fill="#c8f135"/><path d="M7.4 7.6 C5.9 8.2 5.2 9.4 5.4 11 C5.6 12.4 5.2 13.4 4.2 14 C5.4 14.7 5.9 15.8 5.7 17.3 C5.5 18.9 6.1 20.2 7.6 20.9" stroke="#0a0a0c" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" fill="none"/><path d="M24.6 7.6 C26.1 8.2 26.8 9.4 26.6 11 C26.4 12.4 26.8 13.4 27.8 14 C26.6 14.7 26.1 15.8 26.3 17.3 C26.5 18.9 25.9 20.2 24.4 20.9" stroke="#0a0a0c" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" fill="none"/><path d="M12 7.8 H17 C19.2 7.8 20.7 9 20.7 11 C20.7 12.4 19.9 13.4 18.6 13.9 C20.2 14.3 21.1 15.5 21.1 17.1 C21.1 19.2 19.5 20.4 17.2 20.4 H12 Z M14.7 10.1 V12.9 H16.7 C17.7 12.9 18.3 12.4 18.3 11.5 C18.3 10.6 17.7 10.1 16.7 10.1 Z M14.7 15 V18.1 H17 C18 18.1 18.6 17.5 18.6 16.5 C18.6 15.6 18 15 17 15 Z" fill="#0a0a0c"/></svg><span class="sp-credit-txt"><span class="sp-credit-kicker">Peeked &amp; shipped by</span><span class="sp-credit-brand">Build with Siddesh</span></span><svg class="sp-credit-go" viewBox="0 0 16 16" fill="none"><path d="M5 11L11 5M11 5H6M11 5V10" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></a></footer>
   </div></div>`;
 }
 
@@ -59,7 +59,7 @@ function screenshot(headline, sub, openEvidence){
   .tick{display:flex;align-items:center;gap:11px;font-size:16px;color:#2b3145;font-weight:560}
   .tick i{width:22px;height:22px;border-radius:50%;background:#ecfdf3;color:#16a34a;display:flex;align-items:center;justify-content:center;font-size:13px;border:1px solid #c3ead1}
   .panel{width:400px;height:672px;overflow:hidden;border-radius:18px;box-shadow:0 30px 70px rgba(50,40,110,.24),0 0 0 1px rgba(20,20,50,.05);background:#fff}
-  .panel .sp{min-height:0}
+  .panel .sp{height:672px}
   </style>
   <div class="shot"><div class="left">
     <div class="chip"><img src="${icon}"><b>Stack<span>Peek</span></b></div>
@@ -80,8 +80,12 @@ function promo(w,h,big){
   .strip{display:flex;gap:22px;margin-top:14px;position:relative;z-index:1;opacity:.95}
   .lg{width:34px;height:34px;background:#fff;border-radius:9px;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(0,0,0,.2)}
   .lg svg{width:20px;height:20px}
+  .by{position:absolute;${big?'bottom:22px;right:28px':'bottom:12px'};z-index:1;display:flex;align-items:center;gap:7px;font-size:${big?14:11}px;font-weight:600;opacity:.9}
+  .by .bmark{width:${big?20:16}px;height:${big?20:16}px;border-radius:${big?5:4}px}
   </style>
-  <div class="tile"><img class="ic" src="${icon}"><div class="wm">StackPeek</div><div class="tg">See what any website is built on &mdash; CMS, frameworks, analytics, ad tech, hosting. One click, 100% local.</div>${strip}</div>`;
+  <div class="tile"><img class="ic" src="${icon}"><div class="wm">StackPeek</div><div class="tg">See what any website is built on &mdash; CMS, frameworks, analytics, ad tech, hosting. One click, 100% local.</div>${strip}
+    <div class="by"><svg class="bmark" viewBox="0 0 32 32" fill="none"><rect width="32" height="32" rx="8" fill="#c8f135"/><path d="M7.4 7.6 C5.9 8.2 5.2 9.4 5.4 11 C5.6 12.4 5.2 13.4 4.2 14 C5.4 14.7 5.9 15.8 5.7 17.3 C5.5 18.9 6.1 20.2 7.6 20.9" stroke="#0a0a0c" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M24.6 7.6 C26.1 8.2 26.8 9.4 26.6 11 C26.4 12.4 26.8 13.4 27.8 14 C26.6 14.7 26.1 15.8 26.3 17.3 C26.5 18.9 25.9 20.2 24.4 20.9" stroke="#0a0a0c" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M12 7.8 H17 C19.2 7.8 20.7 9 20.7 11 C20.7 12.4 19.9 13.4 18.6 13.9 C20.2 14.3 21.1 15.5 21.1 17.1 C21.1 19.2 19.5 20.4 17.2 20.4 H12 Z M14.7 10.1 V12.9 H16.7 C17.7 12.9 18.3 12.4 18.3 11.5 C18.3 10.6 17.7 10.1 16.7 10.1 Z M14.7 15 V18.1 H17 C18 18.1 18.6 17.5 18.6 16.5 C18.6 15.6 18 15 17 15 Z" fill="#0a0a0c"/></svg><span>buildwithsiddesh.com</span></div>
+  </div>`;
 }
 
 (async () => {
