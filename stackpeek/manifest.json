@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "StackPeek — Website Tech Stack Detector",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "See what any website is built on — CMS, frameworks, analytics, ad tech, hosting. One click. No account, no limits. 100% local.",
   "permissions": ["activeTab", "scripting", "storage", "sidePanel"],
   "background": {
