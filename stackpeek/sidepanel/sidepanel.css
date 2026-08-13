@@ -31,7 +31,7 @@ body {
   text-rendering: optimizeLegibility;
 }
 
-.sp { display: flex; flex-direction: column; min-height: 100vh; }
+.sp { display: flex; flex-direction: column; height: 100vh; }
 
 /* --------------------------------------------------------------- top bar */
 .sp-top {
@@ -81,7 +81,7 @@ body {
 .sp-site-meta { font-size: 11.5px; color: var(--faint); margin-top: 1px; font-variant-numeric: tabular-nums; }
 
 /* ----------------------------------------------------------------- body */
-.sp-body { flex: 1; padding: 4px 14px 10px; }
+.sp-body { flex: 1; overflow-y: auto; padding: 4px 14px 10px; }
 .sp-panel { display: none; }
 .sp-panel.is-active { display: block; }
 
@@ -171,9 +171,25 @@ body {
 .sp-toast.is-error { color: var(--danger); }
 
 /* footer */
-.sp-foot { display: flex; align-items: center; gap: 8px; padding: 10px 14px; border-top: 1px solid var(--border); background: var(--bg-soft); }
+.sp-foot { display: flex; flex-direction: column; gap: 9px; padding: 10px 14px 11px; border-top: 1px solid var(--border); background: var(--bg-soft); }
+.sp-foot-row { display: flex; align-items: center; gap: 8px; }
 .sp-foot-badge { display: inline-flex; align-items: center; gap: 5px; font-size: 10px; font-weight: 800; letter-spacing: 0.3px; text-transform: uppercase; color: var(--high); background: #eefaf1; border: 1px solid #c3ead1; border-radius: 6px; padding: 3px 7px; }
 .sp-foot-badge::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: var(--high); }
 .sp-foot-text { font-size: 10.5px; color: var(--faint); }
+
+/* creator credit → buildwithsiddesh.com */
+.sp-credit {
+  display: flex; align-items: center; gap: 9px; text-decoration: none;
+  padding: 7px 9px; border-radius: 9px; border: 1px solid var(--border);
+  background: #fff; transition: border-color .15s, background .15s, transform .1s;
+}
+.sp-credit:hover { border-color: #cdd6c2; background: #fbfdf4; transform: translateY(-1px); }
+.sp-bws { width: 20px; height: 20px; border-radius: 5px; flex: none; box-shadow: 0 1px 2px rgba(0,0,0,.12); }
+.sp-credit-txt { display: flex; flex-direction: column; line-height: 1.15; flex: 1; min-width: 0; }
+.sp-credit-kicker { font-size: 9.5px; font-weight: 600; letter-spacing: .2px; color: var(--faint); text-transform: uppercase; }
+.sp-credit-brand { font-size: 12.5px; font-weight: 700; color: var(--text); letter-spacing: -.2px; }
+.sp-credit:hover .sp-credit-brand { color: #4d6b0e; }
+.sp-credit-go { width: 14px; height: 14px; color: var(--faint); flex: none; transition: color .15s, transform .15s; }
+.sp-credit:hover .sp-credit-go { color: #6f9412; transform: translate(1px,-1px); }
 
 @media (prefers-reduced-motion: reduce) { * { animation-duration: .001ms !important; transition-duration: .001ms !important; } }
